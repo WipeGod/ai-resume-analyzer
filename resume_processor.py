@@ -1,37 +1,20 @@
 import PyPDF2
 import docx
-import spacy
 import re
+import nltk
 from typing import List, Dict
 import streamlit as st
 
 class ResumeProcessor:
     def __init__(self):
         try:
-            import spacy
-            try:
-               self.nlp = spacy.load("en_core_web_sm")
-            except OSError:
-                import subprocess
-                import sys
-                try:
-                    subprocess.check_call([sys.executable, "-m", "spacy", "download", "en_core_web_sm"])
-
-                    self.nlp = spacy.load("en_core_web_sm")
-
-                except Exception:
-
-                # If download fails, use basic spacy without model
-
-                    st.warning("⚠️ spaCy model not available. Using basic text processing.")
-
-                    self.nlp = None
-
-        except Exception as e:
-
-            st.error(f"Error loading spaCy: {str(e)}")
-
-            self.nlp = None
+            # Download NLTK data quietly
+            nltk.download('punkt', quiet=True)
+            nltk.download('stopwords', quiet=True)
+            self.nltk_available = True
+        except:
+            self.nltk_available = False
+            st.warning("NLTK not available, using basic text processing")
     
     def extract_text_from_pdf(self, pdf_file):
         """Extract text from PDF resume"""
@@ -69,7 +52,7 @@ class ResumeProcessor:
         return text.strip()
     
     def extract_skills(self, text: str) -> List[str]:
-        """Extract skills from resume text"""
+        """Extract skills from resume text using simple pattern matching"""
         # Comprehensive tech skills list
         tech_skills = [
             # Programming Languages
@@ -111,7 +94,7 @@ class ResumeProcessor:
         return list(set(found_skills))  # Remove duplicates
     
     def extract_experience_years(self, text: str) -> int:
-        """Extract years of experience"""
+        """Extract years of experience using regex patterns"""
         if not text:
             return 0
             
