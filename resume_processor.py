@@ -8,9 +8,29 @@ import streamlit as st
 class ResumeProcessor:
     def __init__(self):
         try:
-            self.nlp = spacy.load("en_core_web_sm")
-        except OSError:
-            st.error("Spacy model not found. Please run: python -m spacy download en_core_web_sm")
+            import spacy
+            try:
+               self.nlp = spacy.load("en_core_web_sm")
+            except OSError:
+                import subprocess
+                import sys
+                try:
+                    subprocess.check_call([sys.executable, "-m", "spacy", "download", "en_core_web_sm"])
+
+                    self.nlp = spacy.load("en_core_web_sm")
+
+                except Exception:
+
+                # If download fails, use basic spacy without model
+
+                    st.warning("⚠️ spaCy model not available. Using basic text processing.")
+
+                    self.nlp = None
+
+        except Exception as e:
+
+            st.error(f"Error loading spaCy: {str(e)}")
+
             self.nlp = None
     
     def extract_text_from_pdf(self, pdf_file):
