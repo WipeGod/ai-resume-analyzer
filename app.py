@@ -5,6 +5,7 @@ import plotly.graph_objects as go
 from resume_processor import ResumeProcessor
 from ranker import ResumeRanker
 import time
+import os
 
 st.set_page_config(
     page_title="AI Resume Analyzer",
@@ -14,7 +15,12 @@ st.set_page_config(
 
 @st.cache_resource
 def load_processors():
-    return ResumeProcessor(), ResumeRanker()
+    try:
+        return ResumeProcessor(), ResumeRanker()
+    except Exception as e:
+        st.error(f"Error loading processors: {str(e)}")
+        st.info("Please wait while the application initializes...")
+        return None, None
 
 def main():
     st.title("🎯 AI Resume Analyzer")

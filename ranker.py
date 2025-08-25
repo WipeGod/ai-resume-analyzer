@@ -6,12 +6,20 @@ import streamlit as st
 
 class ResumeRanker:
     def __init__(self):
-        self.vectorizer = TfidfVectorizer(
-            max_features=1000,
-            stop_words='english',
-            ngram_range=(1, 2),
-            lowercase=True
-        )
+        try:
+            import spacy
+            self.nlp = spacy.load("en_core_web_sm")
+        except OSError:
+            try:
+            # Try to download the model
+                import subprocess
+                import sys
+                subprocess.check_call([sys.executable, "-m", "spacy", "download", "en_core_web_sm"])
+                import spacy
+                self.nlp = spacy.load("en_core_web_sm")
+            except Exception as e:
+                st.error("Spacy model loading failed. Some features may not work properly.")
+                self.nlp = None
     
     def calculate_skill_match_score(self, resume_skills: List[str], 
                                   required_skills: List[str]) -> float:
