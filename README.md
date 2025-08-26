@@ -1,11 +1,9 @@
 # 🎯 AI Resume Analyzer
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://your-app-url.streamlit.app)
-
 An intelligent resume analysis tool that serves both job seekers and HR professionals using advanced NLP techniques.
 
 ## 🚀 Live Demo
-**Try it now:** [https://your-app-url.streamlit.app](https://your-app-url.streamlit.app)
+**Try it now:** [https://your-app-url.streamlit.app](https://ai-resume-analyzer-zf6c5mmhjrrwrabhe6vrxv.streamlit.app/)
 
 ## ✨ Features
 
